@@ -83,21 +83,21 @@
             background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23d4af37' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
         }
 
-        /* Animation Classes */
-        .fade-in-up { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        /* Animation Classes with will-change for GPU acceleration on mobile */
+        .fade-in-up { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; will-change: transform, opacity; }
         .fade-in-up.visible { opacity: 1; transform: translateY(0); }
 
-        .fade-in-left { opacity: 0; transform: translateX(-40px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .fade-in-left { opacity: 0; transform: translateX(-40px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; will-change: transform, opacity; }
         .fade-in-left.visible { opacity: 1; transform: translateX(0); }
 
-        .fade-in-right { opacity: 0; transform: translateX(40px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .fade-in-right { opacity: 0; transform: translateX(40px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; will-change: transform, opacity; }
         .fade-in-right.visible { opacity: 1; transform: translateX(0); }
 
-        .zoom-in { opacity: 0; transform: scale(0.9); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        .zoom-in { opacity: 0; transform: scale(0.9); transition: opacity 0.8s ease-out, transform 0.8s ease-out; will-change: transform, opacity; }
         .zoom-in.visible { opacity: 1; transform: scale(1); }
 
         /* Bloom Animation */
-        .reveal-bloom { opacity: 0; transform: scale(0.3); transition: opacity 1s ease-out, transform 1s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .reveal-bloom { opacity: 0; transform: scale(0.3); transition: opacity 1s ease-out, transform 1s cubic-bezier(0.34, 1.56, 0.64, 1); will-change: transform, opacity; }
         .reveal-bloom.visible { opacity: 1; transform: scale(1); }
 
         /* Falling Leaves Animation */
@@ -115,6 +115,7 @@
             animation: fall linear infinite;
             z-index: 5;
             pointer-events: none;
+            will-change: transform, opacity;
         }
 
         /* Magical Particles Animation */
@@ -131,6 +132,7 @@
             z-index: 4;
             pointer-events: none;
             bottom: -10vh;
+            will-change: transform, opacity;
         }
 
         /* Glassmorphism for cards */
@@ -156,6 +158,7 @@
             animation: ripple-animation 0.6s linear;
             background: rgba(255, 255, 255, 0.5);
             pointer-events: none;
+            will-change: transform, opacity;
         }
         @keyframes ripple-animation {
             to { transform: scale(4); opacity: 0; }
@@ -671,7 +674,9 @@
         // --- FALLING LEAVES & MAGICAL PARTICLES ---
         function initFallingLeaves() {
             const container = document.getElementById('particles-container');
-            const particleCount = 25; 
+            // Optimasi performa untuk mobile: turunkan jumlah partikel di layar kecil
+            const isMobile = window.innerWidth < 768;
+            const particleCount = isMobile ? 15 : 25; 
             
             for(let i = 0; i < particleCount; i++) {
                 let leaf = document.createElement('div');
@@ -685,7 +690,10 @@
                     
                     leaf.style.fontSize = (Math.random() * 15 + 12) + 'px';
                     leaf.style.animationDuration = (Math.random() * 8 + 8) + 's'; 
-                    leaf.style.filter = `blur(${Math.random() * 2}px)`; 
+                    // Optimasi HP: Nonaktifkan efek blur pada mobile agar framerate stabil
+                    if (!isMobile) {
+                        leaf.style.filter = `blur(${Math.random() * 2}px)`; 
+                    }
                 } else {
                     leaf.className = 'magical-particle bg-gold-light rounded-full';
                     const size = Math.random() * 4 + 2;
@@ -774,7 +782,7 @@
         // Autoplay handle for mobile
         document.body.addEventListener('touchstart', function() {
             if (!isPlaying && hasInteracted === false) { safePlay(); }
-        }, { once: true }); 
+        }, { once: true, passive: true }); 
 
         document.body.addEventListener('click', function() {
             if (!isPlaying && hasInteracted === false) { safePlay(); }
@@ -897,7 +905,8 @@
             });
         }
 
-        // --- PARALLAX SCROLL EFFECT ---
+        // --- PARALLAX SCROLL EFFECT (Optimized for Mobile) ---
+        // Penambahan '{ passive: true }' untuk mencegah scroll lag/tersendat di mobile
         window.addEventListener('scroll', () => {
             if (!ticking) {
                 window.requestAnimationFrame(() => {
@@ -917,7 +926,7 @@
                 });
                 ticking = true;
             }
-        });
+        }, { passive: true });
 
         // --- INTERACTIVE ANIMATIONS (Confetti & Ripple) ---
         function fireConfetti() {
