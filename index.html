@@ -100,8 +100,9 @@
 </head>
 <body class="bg-gray-200 text-gray-800 font-sans overflow-hidden selection:bg-gold selection:text-white">
 
-    <audio id="bg-music" loop>
-        <source src="https://www.dropbox.com/scl/fi/v3l1uc7hr16fua3ntrg4m/Risk-It-All-Bruno-Mars-Saxophone-Cover-by-Dori-Wirawan.mp3?rlkey=5p1sduqyl1r5ot3d0mfh7a7fd&st=rxfa2wot&dl=1" type="audio/mp3">
+    <audio id="bg-music" loop preload="auto">
+        <!-- Perbaikan: Mengganti dl=1 menjadi raw=1 agar bisa di-streaming langsung oleh HP -->
+        <source src="https://www.dropbox.com/scl/fi/v3l1uc7hr16fua3ntrg4m/Risk-It-All-Bruno-Mars-Saxophone-Cover-by-Dori-Wirawan.mp3?rlkey=5p1sduqyl1r5ot3d0mfh7a7fd&st=rxfa2wot&raw=1" type="audio/mp3">
     </audio>
 
     <div class="fixed inset-0 mx-auto w-full max-w-[430px] pointer-events-none z-[60]">
@@ -515,7 +516,7 @@
             }
 
             // --- COUNTDOWN TIMER ---
-            const countDownDate = new Date("Jun 4, 2026 09:30:00").getTime();
+        const countDownDate = new Date("Jun 4, 2026 09:30:00").getTime();
             const countdownInterval = setInterval(function() {
                 const now = new Date().getTime();
                 const distance = countDownDate - now;
@@ -554,6 +555,10 @@
             // 1. Matikan klik di cover agar tidak diklik dua kali
             coverWrapper.style.pointerEvents = 'none';
 
+            // PERBAIKAN UTAMA: Play musik HARUS dipanggil langsung di sini, 
+            // tidak boleh dimasukkan ke dalam setTimeout agar tidak diblokir browser HP
+            safePlay();
+
             // 2. Shrink and fade the center card
             coverCard.style.transform = 'translate(-50%, -50%) scale(0.8)';
             coverCard.style.opacity = '0';
@@ -576,7 +581,6 @@
                 mainContent.classList.remove('opacity-0');
                 musicBtn.classList.remove('hidden');
 
-                safePlay();
                 initFallingLeaves();
                 initScrollAnimations();
             }, 1000);
