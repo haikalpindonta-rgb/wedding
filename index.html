@@ -17,6 +17,10 @@
     <!-- Canvas Confetti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
+    <!-- FIREBASE SDK (Untuk Database RSVP) -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -101,7 +105,6 @@
 <body class="bg-gray-200 text-gray-800 font-sans overflow-hidden selection:bg-gold selection:text-white">
 
     <audio id="bg-music" loop preload="auto">
-        <!-- Perbaikan: Mengganti dl=0 menjadi raw=1 agar bisa di-streaming langsung oleh HP -->
         <source src="https://www.dropbox.com/scl/fi/15rkhvetslyjapizsgrpe/ssstik.io_1779190270283.mp3?rlkey=shse6dagz3204pmdbgtbs2ywp&st=gg70at03&raw=1" type="audio/mp3">
     </audio>
 
@@ -119,21 +122,16 @@
 
     <div id="cover-wrapper" class="fixed inset-0 mx-auto w-full max-w-[430px] z-[70] overflow-hidden bg-black pointer-events-auto">
         
-        <!-- Pintu Kiri -->
         <div id="left-door" class="absolute inset-y-0 left-0 w-1/2 bg-botanical border-r-2 border-gold/50 shadow-[10px_0_30px_rgba(0,0,0,0.5)] transition-transform duration-[1500ms] ease-in-out z-20 flex items-center justify-end overflow-hidden">
             <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-            <!-- Ornamen ukiran separuh -->
             <i class="fas fa-seedling text-gold/20 text-[150px] absolute -right-[75px] top-1/4"></i>
         </div>
 
-        <!-- Pintu Kanan -->
         <div id="right-door" class="absolute inset-y-0 right-0 w-1/2 bg-botanical border-l-2 border-gold/50 shadow-[-10px_0_30px_rgba(0,0,0,0.5)] transition-transform duration-[1500ms] ease-in-out z-20 flex items-center justify-start overflow-hidden">
             <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-            <!-- Ornamen ukiran separuh -->
             <i class="fab fa-pagelines text-gold/20 text-[150px] absolute -left-[75px] bottom-1/4"></i>
         </div>
 
-        <!-- Kartu Tengah (Cover Card) -->
         <div id="cover-card" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[85%] z-30 transition-all duration-700 ease-in-out">
             <div class="glass-card p-8 rounded-[2rem] flex flex-col items-center text-center border-4 border-gold/50 shadow-2xl relative overflow-hidden">
                 <i class="fas fa-crown text-gold text-2xl mb-3 animate-pulse-glow"></i>
@@ -151,25 +149,21 @@
             </div>
         </div>
         
-        <!-- Golden Glow Center Line -->
         <div id="center-glow" class="absolute top-0 bottom-0 left-1/2 w-1 bg-white shadow-[0_0_60px_20px_#D4AF37] z-40 transform -translate-x-1/2 opacity-0 transition-opacity duration-300 pointer-events-none"></div>
     </div>
 
     <div class="w-full max-w-[430px] mx-auto bg-pattern min-h-screen relative overflow-x-hidden border-x border-gold/20 shadow-2xl">
         
-        <!-- Wadah Background Particles yang Sempat Hilang -->
         <div id="particles-container" class="absolute inset-0 pointer-events-none overflow-hidden z-0" style="height: 100%;"></div>
 
-        <!-- Preload Images -->
-    <div class="hidden">
-        <img src="https://lh3.googleusercontent.com/d/1QrwdNrkge_JzmtuC_lx8CgkmXikhOsgy" alt="preload1">
-        <img src="https://lh3.googleusercontent.com/d/1T02D5DWRSqbThfU9jaG6x6AccEyDD2FQ" alt="preload2">
-    </div>
+        <div class="hidden">
+            <img src="https://lh3.googleusercontent.com/d/1QrwdNrkge_JzmtuC_lx8CgkmXikhOsgy" alt="preload1">
+            <img src="https://lh3.googleusercontent.com/d/1T02D5DWRSqbThfU9jaG6x6AccEyDD2FQ" alt="preload2">
+        </div>
 
         <main id="main-content" class="opacity-0 transition-opacity duration-[1200ms] ease-in-out relative z-10 pt-6">
 
             <section class="py-16 px-6 bg-botanical text-white text-center relative overflow-hidden border-y-4 border-double border-gold/40 shadow-lg">
-                <!-- Daun Hijau Pop-up -->
                 <div class="absolute top-1/4 right-4 reveal-pop delay-100 z-20 pointer-events-none">
                     <i class="fas fa-leaf text-4xl text-green-400/80 drop-shadow-md"></i>
                 </div>
@@ -218,7 +212,6 @@
             </section>
 
             <section class="py-12 px-6 text-center reveal-element fade-in-up relative overflow-hidden bg-white/90">
-                <!-- Daun Hijau Pop-up -->
                 <div class="absolute top-1/2 -right-4 reveal-pop delay-200 z-20 pointer-events-none">
                     <i class="fas fa-seedling text-6xl text-botanical/60 drop-shadow-md -rotate-12"></i>
                 </div>
@@ -236,7 +229,6 @@
             </section>
 
             <section class="py-16 px-4 relative overflow-hidden border-t-2 border-gold/20 bg-white/90">
-                <!-- Daun Hijau Pop-up -->
                 <div class="absolute top-32 left-2 reveal-pop delay-100 z-20 pointer-events-none">
                     <i class="fas fa-leaf text-5xl text-botanical/70 drop-shadow-md rotate-45"></i>
                 </div>
@@ -285,18 +277,18 @@
                     </div>
 
                     <!-- Bride -->
-                <div class="w-full px-2 reveal-element fade-in-right relative z-10">
-                    <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-white border border-gold text-gold rounded-full w-8 h-8 flex items-center justify-center shadow-sm z-20">
-                        <i class="fas fa-venus text-sm"></i>
-                    </div>
-                    <div class="glass-card p-5 rounded-3xl border border-gold/30 shadow-md flex flex-col items-center text-center relative pt-8">
-                        <div class="relative w-36 h-48 mb-4">
-                            <div class="absolute inset-0 border border-gold -translate-x-2 translate-y-2 rounded-t-[4rem] rounded-b-2xl"></div>
-                            <div class="w-full h-full overflow-hidden rounded-t-[4rem] rounded-b-2xl relative z-10 border-2 border-white shadow-sm bg-gray-100">
-                                <img src="https://lh3.googleusercontent.com/d/1T02D5DWRSqbThfU9jaG6x6AccEyDD2FQ" alt="Natasya" class="w-full h-full object-cover object-top">
-                            </div>
+                    <div class="w-full px-2 reveal-element fade-in-right relative z-10">
+                        <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-white border border-gold text-gold rounded-full w-8 h-8 flex items-center justify-center shadow-sm z-20">
+                            <i class="fas fa-venus text-sm"></i>
                         </div>
-                        <h3 class="font-serif text-xl text-botanical mb-1 font-bold">Natasya Erta Laurin<br><span class="text-xs font-normal">Br Tarigan, S.Tr.Gz</span></h3>
+                        <div class="glass-card p-5 rounded-3xl border border-gold/30 shadow-md flex flex-col items-center text-center relative pt-8">
+                            <div class="relative w-36 h-48 mb-4">
+                                <div class="absolute inset-0 border border-gold -translate-x-2 translate-y-2 rounded-t-[4rem] rounded-b-2xl"></div>
+                                <div class="w-full h-full overflow-hidden rounded-t-[4rem] rounded-b-2xl relative z-10 border-2 border-white shadow-sm bg-gray-100">
+                                    <img src="https://lh3.googleusercontent.com/d/1T02D5DWRSqbThfU9jaG6x6AccEyDD2FQ" alt="Natasya" class="w-full h-full object-cover object-top">
+                                </div>
+                            </div>
+                            <h3 class="font-serif text-xl text-botanical mb-1 font-bold">Natasya Erta Laurin<br><span class="text-xs font-normal">Br Tarigan, S.Tr.Gz</span></h3>
                             <p class="text-gold font-bold mb-3 text-[10px] tracking-[0.2em] uppercase bg-gold/10 px-3 py-1 rounded-full">Putri</p>
                             <p class="text-gray-600 text-xs leading-relaxed font-medium">
                                 Bapak Tahan Tarigan, S.Kom, S.Pd <br> <span class="text-gold">&</span> <br> Ibu Ernawati Br. Sitepu
@@ -310,7 +302,6 @@
             </section>
 
             <section class="py-16 px-6 relative overflow-hidden border-t border-gold/20 bg-white/90">
-                <!-- Daun Hijau Pop-up -->
                 <div class="absolute top-40 -left-6 reveal-pop delay-200 z-20 pointer-events-none">
                     <i class="fas fa-seedling text-7xl text-botanical/50 drop-shadow-md rotate-12"></i>
                 </div>
@@ -326,7 +317,6 @@
                     </div>
 
                     <div class="grid gap-6 mb-8">
-                        <!-- Malam Perkenalan Event -->
                         <div class="glass-card p-5 rounded-2xl shadow-sm border-t-4 border-botanical reveal-element fade-in-left">
                             <i class="fas fa-handshake text-3xl text-botanical mb-2 opacity-80"></i>
                             <h3 class="font-serif text-xl text-botanical mb-2 font-bold">Malam Perkenalan</h3>
@@ -340,7 +330,6 @@
                             </a>
                         </div>
 
-                        <!-- Pemberkatan Event -->
                         <div class="glass-card p-5 rounded-2xl shadow-sm border-t-4 border-gold reveal-element fade-in-right">
                             <i class="fas fa-church text-3xl text-botanical mb-2 opacity-80"></i>
                             <h3 class="font-serif text-xl text-botanical mb-2 font-bold">Pemberkatan</h3>
@@ -354,7 +343,6 @@
                             </a>
                         </div>
 
-                        <!-- Resepsi Event -->
                         <div class="glass-card p-5 rounded-2xl shadow-sm border-t-4 border-gold reveal-element fade-in-left">
                             <i class="fas fa-glass-cheers text-3xl text-botanical mb-2 opacity-80"></i>
                             <h3 class="font-serif text-xl text-botanical mb-2 font-bold">Resepsi</h3>
@@ -372,7 +360,6 @@
             </section>
 
             <section class="py-12 px-6 bg-white/95 relative overflow-hidden border-t border-gold/20">
-                <!-- Daun Hijau Pop-up -->
                 <div class="absolute top-1/3 left-2 reveal-pop delay-100 z-20 pointer-events-none">
                     <i class="fab fa-pagelines text-5xl text-botanical/70 drop-shadow-md rotate-45"></i>
                 </div>
@@ -398,7 +385,6 @@
             </section>
 
             <section class="py-16 px-6 bg-botanical text-white relative overflow-hidden border-y-4 border-double border-gold/40">
-                <!-- Daun Hijau Pop-up -->
                 <div class="absolute bottom-10 right-4 reveal-pop delay-300 z-20 pointer-events-none">
                     <i class="fas fa-leaf text-5xl text-green-400/80 drop-shadow-md -rotate-12"></i>
                 </div>
@@ -415,7 +401,6 @@
                     </div>
                     
                     <div class="grid gap-5">
-                        <!-- Rekening Bride -->
                         <div class="bg-white/10 border border-white/20 p-5 rounded-2xl relative reveal-element fade-in-left shadow-sm">
                             <i class="fas fa-credit-card text-2xl text-gold-light mb-2"></i>
                             <h3 class="text-lg font-bold mb-1">Bank BRI</h3>
@@ -427,7 +412,6 @@
                             </button>
                         </div>
 
-                        <!-- Rekening Groom -->
                         <div class="bg-white/10 border border-white/20 p-5 rounded-2xl relative reveal-element fade-in-right shadow-sm">
                             <i class="fas fa-credit-card text-2xl text-gold-light mb-2"></i>
                             <h3 class="text-lg font-bold mb-1">Bank BRI</h3>
@@ -465,7 +449,7 @@
                                     <option value="Tidak Hadir">❌ Maaf, saya tidak bisa hadir</option>
                                 </select>
                             </div>
-                            <button type="submit" class="w-full bg-botanical text-white py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 mt-2 uppercase">
+                            <button type="submit" id="submit-btn" class="w-full bg-botanical text-white py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 mt-2 uppercase">
                                 <i class="fas fa-paper-plane"></i> Kirim Pesan
                             </button>
                         </form>
@@ -477,14 +461,8 @@
                             <h2 class="font-serif text-2xl text-botanical mb-1 font-bold">Buku Tamu</h2>
                         </div>
                         
-                        <div id="guestbook-list" class="overflow-y-auto max-h-[250px] pr-2 space-y-3">
-                            <div class="bg-gray-50 p-3 rounded-xl border border-gray-100">
-                                <div class="flex items-center justify-between mb-1 pb-1 border-b border-gray-200">
-                                    <span class="font-bold text-xs text-botanical"><i class="fas fa-user-circle text-gold mr-1"></i> Keluarga Tarigan</span>
-                                    <span class="text-[9px] bg-green-100 text-green-700 font-bold px-2 py-0.5 rounded">Hadir</span>
-                                </div>
-                                <p class="text-[11px] text-gray-600 leading-relaxed">Selamat menempuh hidup baru Andika dan Ririn. Semoga Tuhan selalu memberkati rumah tangga kalian.</p>
-                            </div>
+                        <div id="guestbook-list" class="overflow-y-auto max-h-[300px] pr-2 space-y-3">
+                            <div class="text-center text-xs text-gray-400 py-4"><i class="fas fa-spinner fa-spin mr-2"></i>Memuat buku tamu...</div>
                         </div>
                     </div>
 
@@ -499,6 +477,122 @@
         </main>
     </div>
 
+    <!-- ================= DATABASE FIREBASE LOGIC ================= -->
+    <script>
+        // MASUKKAN KODE FIREBASE DARI CONSOLE ANDA DI BAWAH INI:
+        // (Ganti baris-baris berawalan "KODE_..." dengan kode dari Firebase Anda)
+        const firebaseConfig = {
+            apiKey: "AIzaSyD1HTQjCe4UeQmtkWVq9jpcpFVjkMLoq_0",
+  authDomain: "undangan-andika-ririn.firebaseapp.com",
+  projectId: "undangan-andika-ririn",
+  storageBucket: "undangan-andika-ririn.firebasestorage.app",
+  messagingSenderId: "815567148797",
+  appId: "1:815567148797:web:f8ac06db1f6f2713fdd094",
+  measurementId: "G-5540YYS4PZ"
+        };
+
+        // Inisialisasi Firebase
+        let db = null;
+        try {
+            if (firebaseConfig.apiKey !== "KODE_API_ANDA_GANTI_INI") {
+                firebase.initializeApp(firebaseConfig);
+                db = firebase.firestore();
+                loadGuestbook(); // Muat data jika database terhubung
+            } else {
+                document.getElementById('guestbook-list').innerHTML = `<div class="text-center text-xs text-red-400 py-4 font-bold">Database Firebase belum di-setting! Lihat panduan.</div>`;
+            }
+        } catch(e) {
+            console.error("Gagal konek ke Firebase", e);
+        }
+
+        // --- FUNGSI MENGAMBIL DATA DARI DATABASE ---
+        async function loadGuestbook() {
+            if (!db) return;
+            const guestbookList = document.getElementById('guestbook-list');
+            try {
+                // Ambil data, urutkan dari yang paling baru
+                const snapshot = await db.collection("rsvp").orderBy("timestamp", "desc").get();
+                guestbookList.innerHTML = ''; // Bersihkan list
+                
+                if (snapshot.empty) {
+                    guestbookList.innerHTML = '<div class="text-center text-xs text-gray-400 py-4">Belum ada ucapan. Jadilah yang pertama!</div>';
+                    return;
+                }
+
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    renderGuestbookEntry(data.name, data.message, data.attendance);
+                });
+            } catch(e) {
+                console.error("Error membaca data: ", e);
+                guestbookList.innerHTML = `<div class="text-center text-xs text-red-400 py-4 font-bold">Error memuat data (Pastikan rules Firestore diset "Test Mode")</div>`;
+            }
+        }
+
+        // --- FUNGSI MERENDER HTML BUKU TAMU ---
+        function renderGuestbookEntry(name, message, attendance) {
+            const badgeClass = attendance === 'Hadir' ? 'bg-green-100 text-green-700' : 'bg-red-50 text-red-600';
+            const iconClass = attendance === 'Hadir' ? 'text-gold' : 'text-gray-400';
+            
+            const newGuestbookEntry = `
+                <div class="bg-gray-50 p-3 rounded-xl border border-gray-100 fade-in-up visible">
+                    <div class="flex items-center justify-between mb-1 pb-1 border-b border-gray-200">
+                        <span class="font-bold text-xs text-botanical"><i class="fas fa-user-circle ${iconClass} mr-1"></i> ${name}</span>
+                        <span class="text-[9px] ${badgeClass} font-bold px-2 py-0.5 rounded">${attendance}</span>
+                    </div>
+                    <p class="text-[11px] text-gray-600 leading-relaxed">${message}</p>
+                </div>
+            `;
+            const guestbookList = document.getElementById('guestbook-list');
+            // Hapus teks "Belum ada ucapan" jika ini entri pertama
+            if (guestbookList.innerHTML.includes("Belum ada ucapan")) guestbookList.innerHTML = '';
+            
+            guestbookList.insertAdjacentHTML('beforeend', newGuestbookEntry);
+        }
+
+        // --- FUNGSI MENGIRIM DATA KE DATABASE ---
+        async function submitForm(event) {
+            event.preventDefault(); 
+            const name = document.getElementById('form-name').value;
+            const message = document.getElementById('form-message').value;
+            const attendance = document.getElementById('form-attendance').value;
+            const btn = document.getElementById('submit-btn');
+
+            if (!db) {
+                showToast("Database belum di-setting!");
+                return;
+            }
+
+            btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Mengirim...`;
+            btn.disabled = true;
+
+            try {
+                // Simpan ke Firestore
+                await db.collection("rsvp").add({
+                    name: name,
+                    message: message,
+                    attendance: attendance,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp() // Catat waktu
+                });
+
+                showToast("Terima kasih atas ucapan Anda!");
+                confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+                document.getElementById('rsvp-form').reset();
+                
+                // Refresh daftar buku tamu secara otomatis
+                loadGuestbook();
+
+            } catch(e) {
+                console.error("Gagal mengirim:", e);
+                showToast("Terjadi kesalahan. Coba lagi.");
+            }
+
+            btn.innerHTML = `<i class="fas fa-paper-plane"></i> Kirim Pesan`;
+            btn.disabled = false;
+        }
+    </script>
+
+    <!-- ================= OTHER JAVASCRIPT LOGIC ================= -->
     <script>
         let isPlaying = false;
         let audioPromise;
@@ -551,30 +645,21 @@
             const musicBtn = document.getElementById('music-btn');
             const centerGlow = document.getElementById('center-glow');
 
-            // 1. Matikan klik di cover agar tidak diklik dua kali
             coverWrapper.style.pointerEvents = 'none';
 
-            // PERBAIKAN UTAMA: Play musik HARUS dipanggil langsung di sini, 
-            // tidak boleh dimasukkan ke dalam setTimeout agar tidak diblokir browser HP
             safePlay();
 
-            // 2. Shrink and fade the center card
             coverCard.style.transform = 'translate(-50%, -50%) scale(0.8)';
             coverCard.style.opacity = '0';
 
-            // 3. Center glow effect
             setTimeout(() => { centerGlow.style.opacity = '1'; }, 200);
-
-            // 4. Fire confetti
             setTimeout(() => { fireConfettiCenter(); }, 400);
 
-            // 5. Split doors & Show Content
             setTimeout(() => {
                 centerGlow.style.opacity = '0';
                 leftDoor.style.transform = 'translateX(-100%)';
                 rightDoor.style.transform = 'translateX(100%)';
                 
-                // Content langsung memudar masuk tanpa jeda gelap
                 coverWrapper.style.backgroundColor = 'transparent';
                 document.body.classList.remove('overflow-hidden');
                 mainContent.classList.remove('opacity-0');
@@ -584,7 +669,6 @@
                 initScrollAnimations();
             }, 1000);
 
-            // Hide cover wrapper completely after transition
             setTimeout(() => {
                 coverWrapper.classList.add('hidden');
             }, 2500);
@@ -601,7 +685,6 @@
             }());
         }
 
-        // --- FALLING LEAVES (Optimized Ekstrem & Delay Negatif) ---
         function initFallingLeaves() {
             const container = document.getElementById('particles-container');
             const isMobile = window.innerWidth < 768;
@@ -634,7 +717,6 @@
             }
         }
 
-        // --- AUDIO CONTROLS ---
         function updateMusicIcon(playing) {
             const icon = document.getElementById('music-icon');
             if (playing) {
@@ -676,7 +758,6 @@
             if (!isPlaying && hasInteracted === false) { safePlay(); }
         }, { once: true });
 
-        // --- UTILITIES (TOAST & COPY) ---
         function showToast(message) {
             const toast = document.getElementById('toast');
             document.getElementById('toast-message').innerText = message;
@@ -714,34 +795,6 @@
             document.body.removeChild(textArea);
         }
 
-        // --- RSVP FORM ---
-        function submitForm(event) {
-            event.preventDefault(); 
-            const name = document.getElementById('form-name').value;
-            const message = document.getElementById('form-message').value;
-            const attendance = document.getElementById('form-attendance').value;
-            
-            const badgeClass = attendance === 'Hadir' ? 'bg-green-100 text-green-700' : 'bg-red-50 text-red-600';
-            const iconClass = attendance === 'Hadir' ? 'text-gold' : 'text-gray-400';
-            
-            const newGuestbookEntry = `
-                <div class="bg-gray-50 p-3 rounded-xl border border-gray-100 fade-in-up visible">
-                    <div class="flex items-center justify-between mb-1 pb-1 border-b border-gray-200">
-                        <span class="font-bold text-xs text-botanical"><i class="fas fa-user-circle ${iconClass} mr-1"></i> ${name}</span>
-                        <span class="text-[9px] ${badgeClass} font-bold px-2 py-0.5 rounded">${attendance}</span>
-                    </div>
-                    <p class="text-[11px] text-gray-600 leading-relaxed">${message}</p>
-                </div>
-            `;
-            
-            const guestbookList = document.getElementById('guestbook-list');
-            guestbookList.insertAdjacentHTML('afterbegin', newGuestbookEntry);
-            showToast("Terima kasih atas ucapan Anda!");
-            confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
-            document.getElementById('rsvp-form').reset();
-        }
-
-        // --- INTERSECTION OBSERVER (Animasi Scroll & Pop-up) ---
         function initScrollAnimations() {
             const observer = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
@@ -757,7 +810,6 @@
                 threshold: 0.05 
             });
 
-            // Pastikan class reveal-pop (Daun hijau) ikut diobservasi
             document.querySelectorAll('.reveal-element, .reveal-bloom, .reveal-pop').forEach((el) => {
                 observer.observe(el);
             });
